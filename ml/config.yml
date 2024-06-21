@@ -1,0 +1,82 @@
+features:
+- dteday
+- season
+- hr
+- holiday
+- weekday
+- workingday
+- weathersit
+- temp
+- atemp
+- hum
+- windspeed
+- casual
+- registered
+- yr
+- mnth
+holiday_mappings:
+  'No': 1
+  'Yes': 0
+hr_mappings:
+  10am: 9
+  10pm: 8
+  11am: 11
+  11pm: 7
+  12am: 5
+  12pm: 17
+  1am: 4
+  1pm: 16
+  2am: 3
+  2pm: 15
+  3am: 1
+  3pm: 18
+  4am: 0
+  4pm: 19
+  5am: 2
+  5pm: 23
+  6am: 6
+  6pm: 22
+  7am: 12
+  7pm: 20
+  8am: 21
+  8pm: 14
+  9am: 13
+  9pm: 10
+mnth_mappings:
+  April: 5
+  August: 11
+  December: 2
+  February: 1
+  January: 0
+  July: 10
+  June: 9
+  March: 3
+  May: 7
+  November: 4
+  October: 6
+  September: 8
+s3-bucket:
+  bucket_name: sagemaker-us-east-1-644383320443
+  bucket_prefix: siemens-poc/
+  training_file_key: siemens-poc/bike-sharing-dataset.csv
+sagemaker:
+  domain_id: d-zjfao8azi0ng
+  region: us-east-1
+  role: arn:aws:iam::644383320443:role/service-role/AmazonSageMaker-ExecutionRole-20240109T220483
+season_mappings:
+  fall: 3
+  spring: 0
+  summer: 2
+  winter: 1
+target: cnt
+weathersit_mappings:
+  Clear: 3
+  Heavy Rain: 0
+  Light Rain: 1
+  Mist: 2
+workingday_mappings:
+  'No': 0
+  'Yes': 1
+yr_mappings:
+  2011: 0
+  2012: 1
