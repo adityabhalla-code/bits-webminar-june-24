@@ -106,10 +106,7 @@ def pre_process(dataframe):
     df['workingday'] = df['workingday'].apply(lambda x: workingday_mapping[x])
     df['hr'] = df['hr'].apply(lambda x: hour_mapping[x])
     encoder.fit(df[['weekday']])
-    # enc_wkday_features = encoder.get_feature_names_out(['weekday'])
-    # enc_wkday_features = encoder.get_feature_names_out()
-    enc_wkday_features = encoder.get_feature_names(['weekday'])
-    print("Features:", enc_wkday_features)
+    enc_wkday_features = encoder.get_feature_names_out(['weekday'])
     encoded_weekday = encoder.transform(df[['weekday']]).toarray()
     df[enc_wkday_features] = encoded_weekday
     # drop not required columns
@@ -120,13 +117,14 @@ def pre_process(dataframe):
 
 
 
+
 def _parse_args():
     
     parser = argparse.ArgumentParser()
     # Data, model, and output directories
     # model_dir is always passed in from SageMaker. By default this is a S3 path under the default bucket.
     parser.add_argument('--filepath', type=str, default='/opt/ml/processing/input/')
-    parser.add_argument('--filename', type=str, default='bike-sharing-dataset.csv')
+    parser.add_argument('--filename', type=str, default='bits-webminar-june-24/bike-sharing-dataset.csv')
     parser.add_argument('--outputpath', type=str, default='/opt/ml/processing/output/')
     
     return parser.parse_known_args()
@@ -137,18 +135,6 @@ if __name__=="__main__":
     args, _ = _parse_args()
     
     target_col = "cnt"
-
-    import sklearn
-    print(f'sklearn container version--{sklearn.__version__}')
-
-
-    # Directory where the file is supposed to be downloaded
-    input_dir = '/opt/ml/processing/input'
-
-    # List files in the directory
-    print("Listing files in the directory:", input_dir)
-    print(os.listdir(input_dir))
-
     
     # Load data
     df_data = pd.read_csv(os.path.join(args.filepath, args.filename))
@@ -167,12 +153,12 @@ if __name__=="__main__":
 
     
     # Save datasets locally
-    train_data.to_csv(os.path.join(args.outputpath, 'train/train.csv'), index=False,header=True)
-    validation_data.to_csv(os.path.join(args.outputpath, 'validation/validation.csv'), index=False,header=True)
-    test_data[target_col].to_csv(os.path.join(args.outputpath, 'test/test_y.csv'), index=False,header=True)
-    test_data.drop([target_col], axis=1).to_csv(os.path.join(args.outputpath, 'test/test_x.csv'), index=False,header=True)
+    train_data.to_csv(os.path.join(args.outputpath, 'train/train.csv'), index=False, header=True)
+    validation_data.to_csv(os.path.join(args.outputpath, 'validation/validation.csv'), index=False, header=True)
+    test_data[target_col].to_csv(os.path.join(args.outputpath, 'test/test_y.csv'), index=False, header=True)
+    test_data.drop([target_col], axis=1).to_csv(os.path.join(args.outputpath, 'test/test_x.csv'), index=False, header=True)
     
     # Save the baseline dataset for model monitoring
-    processed_data.drop([target_col], axis=1).to_csv(os.path.join(args.outputpath, 'baseline/baseline.csv'), index=False,header=True)
+    processed_data.drop([target_col], axis=1).to_csv(os.path.join(args.outputpath, 'baseline/baseline.csv'), index=True, header=False)
     
     print("## Processing complete. Exiting.")
