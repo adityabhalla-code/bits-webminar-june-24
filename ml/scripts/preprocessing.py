@@ -106,7 +106,11 @@ def pre_process(dataframe):
     df['workingday'] = df['workingday'].apply(lambda x: workingday_mapping[x])
     df['hr'] = df['hr'].apply(lambda x: hour_mapping[x])
     encoder.fit(df[['weekday']])
-    enc_wkday_features = encoder.get_feature_names_out(['weekday'])
+    try:
+        enc_wkday_features = encoder.get_feature_names_out(['weekday'])
+    except Exception as e:
+        print(f"Exception occured on get_features_names_out--{e}")
+        enc_wkday_features = [f'weekday_{i}' for i in range(encoder.categories_[0].shape[0])]
     encoded_weekday = encoder.transform(df[['weekday']]).toarray()
     df[enc_wkday_features] = encoded_weekday
     # drop not required columns
@@ -124,15 +128,22 @@ def _parse_args():
     # Data, model, and output directories
     # model_dir is always passed in from SageMaker. By default this is a S3 path under the default bucket.
     parser.add_argument('--filepath', type=str, default='/opt/ml/processing/input/')
-    parser.add_argument('--filename', type=str, default='bits-webminar-june-24/bike-sharing-dataset.csv')
+    parser.add_argument('--filename', type=str, default='bike-sharing-dataset.csv')
     parser.add_argument('--outputpath', type=str, default='/opt/ml/processing/output/')
     
     return parser.parse_known_args()
 
 
 if __name__=="__main__":
+    
+
     # Process arguments
     args, _ = _parse_args()
+    
+    # Verify if the file exists
+    if not os.path.exists(os.path.join(args.filepath, args.filename)):
+        raise FileNotFoundError(f"File not found: {input_file_path}")
+
     
     target_col = "cnt"
     
