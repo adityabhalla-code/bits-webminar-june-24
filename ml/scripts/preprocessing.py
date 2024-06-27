@@ -164,11 +164,12 @@ if __name__=="__main__":
 
     
     # Save datasets locally
+    print(f"output path--{args.outputpath}")
     train_data.to_csv(os.path.join(args.outputpath, 'train/train.csv'), index=False, header=True)
     validation_data.to_csv(os.path.join(args.outputpath, 'validation/validation.csv'), index=False, header=True)
     test_data[target_col].to_csv(os.path.join(args.outputpath, 'test/test_y.csv'), index=False, header=True)
     test_data.drop([target_col], axis=1).to_csv(os.path.join(args.outputpath, 'test/test_x.csv'), index=False, header=True)
-    
+    print(f"output path--{args.outputpath}")
     # Save the baseline dataset for model monitoring
     processed_data.drop([target_col], axis=1).to_csv(os.path.join(args.outputpath, 'baseline/baseline.csv'), index=True, header=False)
     
